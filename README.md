@@ -6,47 +6,82 @@ into either of those categories. We then run a series of images of hamburgers to
 to demonstrate that the k-NN isn't really learning any specific features about the images, but rather just comparing distances.
 We see that hamburgers can be easily misclassified as hot dogs.
 
-This demonstrates that k-NN is a simple algorithm that it doesn't do any 'true learning' like we see in neural networks.
+This is project is to demonstrate the use of the simple but sometime effective k-NN algorithm and showcase some of its 
+downfalls.
+
 
 ## Description
-#### ArUco Markers:
-ArUco markers are a type of fiducial marker. They can be used as reference points that are placed in the FOV of a camera.
-They can be used for a number of things including camera calibration, object orientation, autonomous navigation, and many more.
-More infor can be found here: https://docs.opencv.org/4.x/d9/d6a/group__aruco.html
+The goal of this project is to train a k-NN classifier on the raw pixel values of the dataset and use it
+to classify unknown images.
 
-#### ArUco Layout:
-I have pre-generated 4 unique ArUco markers and outlined them in a rectangular fashion on a sheet of 8.5x11 printer paper.
-The PDF of this can be found at 'aruco_pdf.pdf' in this directory. Feel free to print this out youself and give it a go!
+The k - Nearest Neighbor algorithm is a very simple image classification and machine learning algorithm (probably the most
+simple). Rather than learning specific features about an image, k-NN relies on computing the distance between feature vectors
+and finding the most common class amoung the 'k' closest data points in the model (with each data point casting a vote and
+the class with the highest number of votes wins).
 
-#### Video Capture:
-Once I printed out the PDF with the ArUco markers on it, I fixed it to a spot on one of my walls. I then recorded a
-~30 second video of me walking around the piece of paper from different angles / distances. An example from this video can 
-be seen here:
+This is best shown in the figure from [Pyimagesearch](https://pyimagesearch.com/2021/04/17/your-first-image-classifier-using-k-nn-to-classify-images/?_ga=2.211896913.49613672.1647198253-1931257770.1641919015):  
+![alt text](media/knn_example.png)
+
+#### Pipeline overview:
+This project follows the traditional machine learning pipeline, which is:
+1. **Gather the Dataset**
+   1. I haven't included the entire dataset used for this project, but there is a sample of the images.
+2. **Split the Dataset (Training and Evaluation)**
+   1. This project uses a 80% training to 20% testing split.
+3. **Train the Classifier (kNN)**
+   1. Use the raw pixel values of the images to train a model
+4. **Evaluate Model**
+   1. Use the test set to gauge the performance of the trained model.
+   
+## Classification Results:
+To train the model we use ~1000 images of the 'Hot Dog' class and ~1000 images of the 'Not Hot Dog' class. The 'Not Hot Dog' class
+can be anything (basketball, beach, chair, etc). These images are used to train a model which is used to classify new images
+into either the **'Hot Dog'** or **'Not Hot Dog'** category.
+
+#### Example Hot Dog Image:  
+![alt text](dataset/hot-dog/hotdog/6.jpg)
+
+#### Example Not Hot Dog Image:  
+![alt text](dataset/hot-dog/nothotdog/_methode_times_prod_web_bin_8739a606-d274-11ea-8f7a-2750741cc65b.jpg)
+
+### Results
+We then used ~250 images of each class to quantify the classification results of the model. These results can be seen below:
+```buildoutcfg
+              precision    recall  f1-score   support
+
+      hotdog       0.80      0.61      0.69       370
+   nothotdog       0.53      0.74      0.61       219
+
+    accuracy                           0.66       589
+   macro avg       0.66      0.67      0.65       589
+weighted avg       0.70      0.66      0.66       589
+```
+We can see that we had about 80% accuracy in correctly classifying images as hotdogs and 53% accuracy for classifying images 
+as anything other than a hot dog.
   
-![](/gifs/AR_raw.gif)  
+Not bad! But this is an easy one. We have one very specific class and one super broad. So getting a decent accuracy in the
+specific class is not surprising. But to showcase the weakness of the kNN, what if we picked all of the 'Not Hot Dog' images 
+to be of... a Hamburger! How well will the trained kNN work now? Let's find out.
 
-#### Weather Screenshot:
-I wanted to overlay something ontop the ArUco markers. I chose to display the current weather conditions in my city. 
-This is done using Selenium webdriver to open up the specified URL and screenshot the webpage. This can be seen in
-line 30-42 in the 'ar_main.py' script. The automated webpage / screenshot process looks like this:
+We then fed 25 images of hot dogs and 25 images of hamburgers ('not hot dog') into the same trained model, and the results
+can be seen below:  
+```buildoutcfg
+              precision    recall  f1-score   support
 
-![](/gifs/selenium.gif)  
+      hotdog       0.38      0.48      0.42        25
+   nothotdog       0.28      0.20      0.23        25
 
-#### ArUco Detection:
-Then using OpenCV techniques and functions, I can (attempt) to detect the ArUco markers in each frame of the video. All 4
-markers are required to overlay an image. However, do to motion blur / shadowing in the video not all 4 are detected everytime.
-I do use a 'cache' to remove any flickering that uses the previous points when all 4 markers were found until they are all
-found again. The detection of the markers can be seen below:
+    accuracy                           0.34        50
+   macro avg       0.33      0.34      0.33        50
+weighted avg       0.33      0.34      0.33        50
+```  
+We see that we perform very poorly in the 'not hot dog' category (and the 'hot dog' category) with an accuracy of 28%. The
+results are not surprising. This is because all the 'not hot dog' images were hamburgers, which if you look at the example hamburger
+image below....
   
-![](/gifs/AR_marker_detection.gif)  
+![alt text](dataset/hot-dog-hamburger/nothotdog/003.jpg)
 
-#### Image Overlay:
-If all 4 markers are detected, then I overlay the weather image on the video image in the proper spot. This is done
-by extracting the four outside corners of the ArUco markers and creating a transform matrix to transform the weather image
-to the video. You'll see there are certain spots where this is 'choppy'. This is when one (or more) of the markers was not
-detected in that frame. This can be made more smooth with some more advanced CV techniques if desired.
-
-![](/gifs/AR_overlay.gif)  
+The images of the hamburger and hot dog are not that different, especially when they are downsized to 32x32 images!
 
 ## Getting Started
 
@@ -58,27 +93,32 @@ See requirements.txt
 
 #### Clone the project:
 ```
-git clone git@github.com:reedajohns/Video-Augmented-Reality-with-Aruco-Markers-OpenCV.git
+git clone git@github.com:reedajohns/k-NN-Image-Classifier-Hot-Dog-or-Not-Hot-Dog.git
 ```
-#### Update proper paths:
-Line 15 in 'ar_main.py': (Weater.com city, currently set to Minneapolis, MN) 
-```
-weather_URL = "https://weather.com/weather/today/l/f2a75f4d0ceadba8e629bb2bacb40414bb499eb922989f847a9fa0659bf127e3"
-```
+#### Image paths:
+The images in this dataset follow the format of:  
+```/path/to/dataset/{class}/{image}.jpg```  
+All we have to do is supply the main image directory path and the script will load the subdirectories as the class of image
+and the image paths within that class subdir.
 
 ### Executing program
 
 Open terminal and run command:
 ```
-python ar_main.py --source PATH_TO_VIDEO
+python k-NN_main.py -d DATA_PATH
 ```
-Where PATH_TO_VIDEO is your prerecorded video with the proper ArUco markers in it.
+Where DATA_PATH is your properly formatted data directory.
+
+Example:
+```
+python k-NN_main.py -d ../dataset/hot-dog
+```
 
 ## Authors
 
 Contributors names and contact info
 
-ex. Reed Johnson (https://www.linkedin.com/in/reed-a-johnson/)
+Reed Johnson (https://www.linkedin.com/in/reed-a-johnson/)
 
 ## Version History
 
@@ -87,9 +127,9 @@ ex. Reed Johnson (https://www.linkedin.com/in/reed-a-johnson/)
 
 ## License
 
-This project is licensed under the [NAME HERE] License - see the LICENSE.md file for details
+This project is licensed under the GNU GENERAL PUBLIC License - see the LICENSE.md file for details
 
 ## Acknowledgments
 
 Inspiration, code snippets, etc.
-* [Pyimagesearch](https://pyimagesearch.mykajabi.com/products/pyimagesearch-university-full-access-plan/categories/4665317/posts/15676936)
+* [Pyimagesearch](https://pyimagesearch.com/2021/04/17/your-first-image-classifier-using-k-nn-to-classify-images/?_ga=2.211896913.49613672.1647198253-1931257770.1641919015)
