@@ -39,7 +39,7 @@ can be anything (basketball, beach, chair, etc). These images are used to train 
 into either the **'Hot Dog'** or **'Not Hot Dog'** category.
 
 #### Example Hot Dog Image:  
-![alt text](dataset/hot-dog-example/hotdog/6.jpg)
+![alt text](dataset/hot-dog-hamburger/hotdog/1515.jpg)
 
 #### Example Not Hot Dog Image:  
 ![alt text](dataset/hot-dog-example/nothotdog/15new-starwars-1-videoSixteenByNineJumbo1600-v2.jpg)
