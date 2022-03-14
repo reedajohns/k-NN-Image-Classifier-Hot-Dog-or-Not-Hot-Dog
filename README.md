@@ -78,6 +78,8 @@ weighted avg       0.33      0.34      0.33        50
 We see that we perform very poorly in the 'not hot dog' category (and the 'hot dog' category) with an accuracy of 28%. The
 results are not surprising. This is because all the 'not hot dog' images were hamburgers, which if you look at the example hamburger
 image below....
+
+#### Example Hamburger Image:  
   
 ![alt text](dataset/hot-dog-hamburger/nothotdog/003.jpg)
 
