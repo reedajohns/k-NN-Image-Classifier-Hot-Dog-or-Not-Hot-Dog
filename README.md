@@ -39,10 +39,10 @@ can be anything (basketball, beach, chair, etc). These images are used to train 
 into either the **'Hot Dog'** or **'Not Hot Dog'** category.
 
 #### Example Hot Dog Image:  
-![alt text](dataset/hot-dog/hotdog/6.jpg)
+![alt text](dataset/hot-dog-example/hotdog/6.jpg)
 
 #### Example Not Hot Dog Image:  
-![alt text](dataset/hot-dog/nothotdog/_methode_times_prod_web_bin_8739a606-d274-11ea-8f7a-2750741cc65b.jpg)
+![alt text](dataset/hot-dog-example/nothotdog/15new-starwars-1-videoSixteenByNineJumbo1600-v2.jpg)
 
 ### Results
 We then used ~250 images of each class to quantify the classification results of the model. These results can be seen below:
@@ -96,8 +96,9 @@ See requirements.txt
 git clone git@github.com:reedajohns/k-NN-Image-Classifier-Hot-Dog-or-Not-Hot-Dog.git
 ```
 #### Image paths:
-The images in this dataset follow the format of:  
-```/path/to/dataset/{class}/{image}.jpg```  
+The images in this dataset follow the format of:
+```/path/to/dataset/{class}/{image}.jpg```    
+
 All we have to do is supply the main image directory path and the script will load the subdirectories as the class of image
 and the image paths within that class subdir.
 
